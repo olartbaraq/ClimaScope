@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/De Futura.ttf",
+      "sha1": "3230a8e405c9dd0fe47a74e58718c6c1fe7d6aa0"
+    },
+    {
+      "path": "assets/fonts/FuturaPTBold.otf",
+      "sha1": "134b9ed86365117365f124c88fbb2698b913cdc7"
+    },
+    {
+      "path": "assets/fonts/FuturaPTLight.otf",
+      "sha1": "692c9008089c680779f49728b1297f527c13b606"
+    },
+    {
+      "path": "assets/fonts/FuturaPTMedium.otf",
+      "sha1": "b90cbd107617a2648ea088d5cd7cf6e188b90786"
+    },
+    {
+      "path": "assets/fonts/intreb.ttf",
+      "sha1": "809f871a3ebb6caa34259141727a21ae80e6a4fb"
+    },
+    {
+      "path": "assets/fonts/intrebol.ttf",
+      "sha1": "7e9b1e6899f542ac149d2cedc64bc95fd56b5fd6"
+    },
+    {
+      "path": "assets/fonts/intreg.ttf",
+      "sha1": "afc9af066c398f5e7e36d8ceb7c4b1f11647c1aa"
+    },
+    {
+      "path": "assets/fonts/intrepid.ttf",
+      "sha1": "0e4419e12581a3f9f9d8f9258b73d28aeff6a3bd"
+    }
+  ]
+}
