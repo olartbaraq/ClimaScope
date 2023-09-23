@@ -14,6 +14,14 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-ClimaScope-ClimaScopeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-ClimaScope-ClimaScopeTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		26E01DFBF09742C493DCBDEF /* De Futura.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 281DC5B20B054ED7AEE3FB71 /* De Futura.ttf */; };
+		F7522B733BE44326B7CB9003 /* FuturaPTBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 5C08EF41A447406990EA61CE /* FuturaPTBold.otf */; };
+		BC80300D1B0A40508D30514E /* FuturaPTLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = B2266E8479614CAA95635D75 /* FuturaPTLight.otf */; };
+		ACC7FD5B29DC4E1BB5332FDF /* FuturaPTMedium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 66F0A8AA58794134912765E6 /* FuturaPTMedium.otf */; };
+		F605F4D3F2C34280BE42226A /* intreb.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 361C438FA62546A5BB6454EF /* intreb.ttf */; };
+		79EB297B1A1B433390822042 /* intrebol.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B2247F045E834E388AF5AFF3 /* intrebol.ttf */; };
+		816F2FDB642D4521BC5BA11B /* intreg.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4181F2657E624D21B654D786 /* intreg.ttf */; };
+		879704D4DB26491794EE4734 /* intrepid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56335B51F92E43DE87858D54 /* intrepid.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +52,14 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ClimaScope/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-ClimaScope-ClimaScopeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ClimaScope-ClimaScopeTests.release.xcconfig"; path = "Target Support Files/Pods-ClimaScope-ClimaScopeTests/Pods-ClimaScope-ClimaScopeTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		281DC5B20B054ED7AEE3FB71 /* De Futura.ttf */ = {isa = PBXFileReference; name = "De Futura.ttf"; path = "../assets/fonts/De Futura.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		5C08EF41A447406990EA61CE /* FuturaPTBold.otf */ = {isa = PBXFileReference; name = "FuturaPTBold.otf"; path = "../assets/fonts/FuturaPTBold.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B2266E8479614CAA95635D75 /* FuturaPTLight.otf */ = {isa = PBXFileReference; name = "FuturaPTLight.otf"; path = "../assets/fonts/FuturaPTLight.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		66F0A8AA58794134912765E6 /* FuturaPTMedium.otf */ = {isa = PBXFileReference; name = "FuturaPTMedium.otf"; path = "../assets/fonts/FuturaPTMedium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		361C438FA62546A5BB6454EF /* intreb.ttf */ = {isa = PBXFileReference; name = "intreb.ttf"; path = "../assets/fonts/intreb.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B2247F045E834E388AF5AFF3 /* intrebol.ttf */ = {isa = PBXFileReference; name = "intrebol.ttf"; path = "../assets/fonts/intrebol.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4181F2657E624D21B654D786 /* intreg.ttf */ = {isa = PBXFileReference; name = "intreg.ttf"; path = "../assets/fonts/intreg.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		56335B51F92E43DE87858D54 /* intrepid.ttf */ = {isa = PBXFileReference; name = "intrepid.ttf"; path = "../assets/fonts/intrepid.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +138,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				3B96DA4331E2472997F2DA66 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +164,22 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		3B96DA4331E2472997F2DA66 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				281DC5B20B054ED7AEE3FB71 /* De Futura.ttf */,
+				5C08EF41A447406990EA61CE /* FuturaPTBold.otf */,
+				B2266E8479614CAA95635D75 /* FuturaPTLight.otf */,
+				66F0A8AA58794134912765E6 /* FuturaPTMedium.otf */,
+				361C438FA62546A5BB6454EF /* intreb.ttf */,
+				B2247F045E834E388AF5AFF3 /* intrebol.ttf */,
+				4181F2657E624D21B654D786 /* intreg.ttf */,
+				56335B51F92E43DE87858D54 /* intrepid.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +277,14 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				26E01DFBF09742C493DCBDEF /* De Futura.ttf in Resources */,
+				F7522B733BE44326B7CB9003 /* FuturaPTBold.otf in Resources */,
+				BC80300D1B0A40508D30514E /* FuturaPTLight.otf in Resources */,
+				ACC7FD5B29DC4E1BB5332FDF /* FuturaPTMedium.otf in Resources */,
+				F605F4D3F2C34280BE42226A /* intreb.ttf in Resources */,
+				79EB297B1A1B433390822042 /* intrebol.ttf in Resources */,
+				816F2FDB642D4521BC5BA11B /* intreg.ttf in Resources */,
+				879704D4DB26491794EE4734 /* intrepid.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
