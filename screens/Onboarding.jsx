@@ -32,7 +32,7 @@ const Onboarding = () => {
                     }}
                     paginationStyle={styles.pagination}
             >
-                <OnboardingContent image={onboardingImage1} boldText1={'Detailed Hourly'} lightText1={'Get in- depth weather'} boldText2={'Forecast'} lightText2={'information.'} />
+                <OnboardingContent image={onboardingImage1} boldText1={'Detailed Hourly'} lightText1={'Get in-depth weather'} boldText2={'Forecast'} lightText2={'information.'} />
 
                 <OnboardingContent image={onboardingImage2} boldText1={'Real-Time'} lightText1={'Watch the progess of the'} boldText2={'Weather Map'} lightText2={'precipitation to stay informed.'} />
 
