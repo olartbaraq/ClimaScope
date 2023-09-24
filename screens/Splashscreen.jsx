@@ -4,11 +4,17 @@ import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, ReduceM
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
+import { useNavigation } from '@react-navigation/native';
+
+
+
 
 const duration = 1500;
 
 
 const Splashscreen = () => {
+
+    const navigation = useNavigation();
 
     const defaultAnim = useSharedValue(-300);
     const linear = useSharedValue(300);;
@@ -34,7 +40,7 @@ const Splashscreen = () => {
         }),
     
         setTimeout(() => {
-            Alert.alert('go Home')
+            navigation.navigate('Onboarding');
         }, 2000);
     }, []);
 

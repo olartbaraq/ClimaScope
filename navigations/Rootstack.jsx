@@ -1,9 +1,10 @@
 import 'react-native-gesture-handler';
-import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme, DarkTheme} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect } from 'react';
 import BackgroundColor from 'react-native-background-color';
-import { Splashscreen } from '../screens';
+import Leftdrawer from './Leftdrawer';
+import { Splashscreen, Onboarding } from '../screens';
 
 
 
@@ -13,22 +14,9 @@ const Stack = createStackNavigator();
 
 const Rootstack = () => {
 
-    const theme = {
-        ...DefaultTheme,
-        colors: {
-            ...DefaultTheme.colors,
-            border: "transparent",
-            background: '#fff',
-        }
-    }
-    useEffect(() => {
-        BackgroundColor.setColor('#FFFFFF');
-    }, []);
-
-
     return (
     <>
-        <NavigationContainer theme={theme}>
+        <NavigationContainer theme={DarkTheme}>
                 <Stack.Navigator
                 initialRouteName='Splashscreen'
                 screenOptions={{
@@ -36,6 +24,14 @@ const Rootstack = () => {
                 }}
                 >
                     <Stack.Screen name='Splashscreen' component={Splashscreen}/>
+
+                    <Stack.Screen
+                        name='Onboarding'
+                    >
+                        {(props) => <Onboarding {...props} />}
+                    </Stack.Screen>
+
+                    <Stack.Screen name='Leftdrawer' component={Leftdrawer}/>
 
                 </Stack.Navigator>
             </NavigationContainer>
