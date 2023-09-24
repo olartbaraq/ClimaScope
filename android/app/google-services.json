@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "118151123165",
+    "project_id": "climascope-a1d18",
+    "storage_bucket": "climascope-a1d18.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:118151123165:android:76a3d7626ba7ed01aa4b34",
+        "android_client_info": {
+          "package_name": "com.climascope"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDy88CLA65oS7lVN2q0rBofFvLzVoGE1Tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

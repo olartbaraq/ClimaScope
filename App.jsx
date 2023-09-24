@@ -1,30 +1,25 @@
-
 import React from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import { SafeAreaView, StatusBar, StyleSheet } from 'react-native';
+import Rootstack from './navigations/Rootstack';
+
 
 
   const App = () => {
     return (
-      <View>
-        <Text style={styles.text}>Welcome</Text>
-      </View>
+      <SafeAreaView style={styles.body}>
+        <StatusBar 
+          animated={true}
+          backgroundColor="#2C2D35"
+        />
+        <Rootstack />
+      </SafeAreaView>
     )
   }
   
 
 const styles = StyleSheet.create({
-  text: {
-    fontFamily: 'FuturaPTLight',
-    fontSize: 16,
-    fontWeight: 'bold',
+  body: {
+    flex: 1,
   }
 });
 
