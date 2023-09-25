@@ -3,14 +3,15 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
+import Icons from '../utils/Icons';
 
 const OnboardingContent = ({image, boldText1, lightText1, boldText2, lightText2}) => {
 
     const navigation = useNavigation();
 
-    // const skipHandler = () => {
-    //     navigation.navigate('Leftdrawer')
-    // }
+    const skipHandler = () => {
+        navigation.navigate('Leftdrawer')
+    }
 
 
     return (
@@ -22,7 +23,7 @@ const OnboardingContent = ({image, boldText1, lightText1, boldText2, lightText2}
             >
                 <View style={styles.upperPart}>
                     <Pressable
-                        //onPress={skipHandler}
+                        onPress={skipHandler}
                         style={styles.skipButton}
                     >
                         <Text style={styles.skip}>Skip</Text>
@@ -46,10 +47,20 @@ const OnboardingContent = ({image, boldText1, lightText1, boldText2, lightText2}
                     <Text style={styles.lightText}>{lightText2}</Text>
                 </View>
 
-                <View>
-    
-                </View>
+                <LinearGradient
+                    colors={['#FF4F80', '#C23ACC', '#C23ACC','#FF4F80']}
+                    start={{ x: 0.1, y: -0.3}} 
+                    end={{ x: -0.2, y: 1}}
+                    style={styles.outerCircle}
+                >
+                    {/* <View style={styles.outerNextButton}>
+                        <View style={styles.InnerNextButton}>
+                            <Icons name={'arrowright'} />
+                        </View>
+                    </View> */}
+                </LinearGradient>
             </View>
+
         </>
     );
 };
@@ -86,7 +97,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: hp(30),
         borderTopRightRadius: hp(30),
         backgroundColor: '#fff',
-        marginTop: hp(-45),
+        marginTop: hp(-55),
         height: hp(60),
     },
 
@@ -112,7 +123,25 @@ const styles = StyleSheet.create({
         fontSize: hp(3.1),
         alignSelf: 'center',
         lineHeight: hp(3)
-    }
+    },
+
+    outerCircle: {
+        height: hp(10),
+        width: wp(20),
+        borderRaduis: wp(20),
+        borderBottomStartRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: hp(2)
+    },
+
+    outerNextButton : {
+        backgroundColor: '#fff',
+        height: hp(6),
+        width: wp(6),
+        borderRaduis: hp(12),
+    },
 
 });
 
