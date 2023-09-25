@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { StyleSheet } from 'react-native'
 import { OnboardingContent } from '../components'
 import Swiper from 'react-native-swiper';
+import { useNavigation } from '@react-navigation/native';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
@@ -11,6 +12,19 @@ const Onboarding = () => {
     const onboardingImage2 = require(`../assets/images/Bitmap1.png`)
     const onboardingImage3 = require(`../assets/images/Bitmap2.png`)
     const onboardingImage4 = require(`../assets/images/Bitmap3.png`)
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        const autoRedirect = () => {
+            setTimeout(() => {
+                navigation.navigate('Leftdrawer');
+            }, 10000);
+        }
+        
+        autoRedirect()
+    }, [])
+    
 
     return (
         <>
