@@ -19,7 +19,7 @@ const Toptab = ({navigation}) => {
         initialRouteName="Today"
         screenOptions={{
           tabBarGap: wp(1),
-          tabBarLabelStyle: { fontSize: 13, fontFamily: 'Roboto', color: '#fff', textTransform: 'capitalize'},
+          tabBarLabelStyle: { fontSize: hp(1.7), fontFamily: 'FuturaPTMedium', color: '#fff', textTransform: 'capitalize'},
           tabBarItemStyle: { width: wp(27), height: hp(5) },
           tabBarStyle: { backgroundColor: 'transparent',
                           borderTopWidth: 0,
@@ -32,8 +32,8 @@ const Toptab = ({navigation}) => {
         }}
       >
         <Tab.Screen name="Today" component={Today} />
-        <Tab.Screen name="Forecast" component={Precipitation} />
-        <Tab.Screen name="Precipitation" component={Forecast} />
+        <Tab.Screen name="Forecast" component={Forecast} />
+        <Tab.Screen name="Precipitation" component={Precipitation} />
         <Tab.Screen name="Radar Sun & Moon" component={Radarsun} />
       </Tab.Navigator>
     </View>
