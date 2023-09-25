@@ -53,13 +53,12 @@ const OnboardingContent = ({image, boldText1, lightText1, boldText2, lightText2}
                     end={{ x: -0.2, y: 1}}
                     style={styles.outerCircle}
                 >
-                <View style={styles.outerNextButton}>
-                    <View style={styles.InnerNextButton}>
-                        <Icons name={'arrowright'} />
-                    </View>
-                </View>
-            </LinearGradient>
-
+                    {/* <View style={styles.outerNextButton}>
+                        <View style={styles.InnerNextButton}>
+                            <Icons name={'arrowright'} />
+                        </View>
+                    </View> */}
+                </LinearGradient>
             </View>
 
         </>
@@ -129,7 +128,8 @@ const styles = StyleSheet.create({
     outerCircle: {
         height: hp(10),
         width: wp(20),
-        //borderRaduis: wp(20),
+        borderRaduis: wp(20),
+        borderBottomStartRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         alignSelf: 'center',
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
         height: hp(6),
         width: wp(6),
         borderRaduis: hp(12),
-    }
+    },
 
 });
 
