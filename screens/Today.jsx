@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View, ScrollView, StyleSheet } from 'react-native';
 import Icons from '../utils/Icons';
-
+import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 
 
 
@@ -10,7 +10,9 @@ const Today = () => {
   return (
     <ScrollView>
       <View style={styles.section1}>
-        <Text style={styles.todayDate}>Saturday,11 Sept</Text>
+        <View style={styles.dateBackground}>
+          <Text style={styles.todayDate}>Saturday,11 Sept</Text>
+        </View>
 
         <View style={styles.upperWeatherIcon}>
           <Icons name={'Partly cloudy'} />
@@ -30,18 +32,51 @@ const Today = () => {
           </View>
 
           <View style={styles.rightValue}>
-
+            <Text style={styles.wind}>Wind 9 KM</Text>
           </View>
         </View>
       </View>
 
+      <View style={styles.separator}></View>
 
     </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
-  
+  section1: {
+    flexDirection: 'column',
+    height: hp(40),
+    width: wp(100),
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    paddingVertical: hp(1),
+    paddingHorizontal: wp(5),
+  },
+
+  dateBackground: {
+    backgroundColor: '#32333E',
+    height: hp(5),
+    width: wp(35),
+    borderRadius: hp(20),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+
+  todayDate: {
+    color: '#979797',
+    fontFamily: 'FuturaPTLight',
+    fontSize: hp(2)
+  },
+
+  upperWeatherIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    height: hp(20),
+    width: wp(70)
+  }
+
 });
 
 export default Today;

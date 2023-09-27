@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, Pressable } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
-import Icons from '../utils/Icons';
+
 
 const OnboardingContent = ({image, boldText1, lightText1, boldText2, lightText2}) => {
 
