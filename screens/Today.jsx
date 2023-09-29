@@ -1,8 +1,10 @@
-import React from 'react'
-import { Text, View, ScrollView, StyleSheet, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react'
+import { Text, View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import Svgs from '../assets/svgs';
+import Icons from '../utils/Icons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradientText } from 'react-native-linear-gradient-text';
+import LinearGradient from 'react-native-linear-gradient';
 
 
 const Today = () => {
@@ -22,7 +24,24 @@ const Today = () => {
     {id: 12, time: '12:00', temp: '26', weather: 'clear'},
   ]
 
+  const Daily = [
+    {id: 1, weekday: 'Today', weather: 'rain', High: '39', Low: '25'},
+    {id: 2, weekday: 'Sunday', weather: 'cloudy', High: '39', Low: '25'},
+    {id: 3, weekday: 'Monday', weather: 'humid', High: '39', Low: '25'},
+    {id: 4, weekday: 'Tuesday', weather: 'sunny', High: '39', Low: '25'},
+    {id: 5, weekday: 'Wednesday', weather: 'clear', High: '39', Low: '25'},
+    {id: 6, weekday: 'Thursday', weather: 'sunny', High: '39', Low: '25'},
+    {id: 7, weekday: 'Friday', weather: 'rain', High: '39', Low: '25'},
+  ]
 
+  const [Click, setClick] = useState(false)
+  const [selectedDaily, setSelectedDaily] = useState(null);
+
+
+  const revealHandler = (id) => {
+    setSelectedDaily(id)
+    setClick(prev => !prev);
+  }
   
   return (
     <ScrollView>
@@ -119,20 +138,80 @@ const Today = () => {
         data={Hourly}
         horizontal={true}
         keyExtractor={item => item.id}
-        renderItem={({item: card}) => (
-          <View style={styles.wholeCard}>
-            <View style={styles.eachCard}>
+        renderItem={({ item: card }) => {
+
+          let cardStyle = styles.eachCard;
+          if (card.time === '04:00') {
+            cardStyle = { ...styles.eachCard, ...styles.color };
+          }
+
+          return (
+            <View style={cardStyle}>
               <Text style={styles.time}>{card.time}</Text>
               <Svgs name={card.weather} width={wp(10)} height={hp(10)} />
               <Text style={styles.time}>{card.weather}</Text>
               <Text style={styles.temp}>{card.temp}°C</Text>
             </View>
-          </View>
-        )}
+          );
+        }}
       />
 
       <View style={styles.separator}></View>
 
+
+      <View style={styles.weeksWeather}>
+        <LinearGradient
+          colors={['#232329', '#2F313A']}
+          useAngle={true} angle={60} angleCenter={{x:0.5,y:0.5}}
+           style={styles.linearGradient}
+        >
+
+          <Text style={styles.highLow}>High  |  Low</Text>
+
+          <View style={styles.wholePicker}>
+            {Daily.map((picker) => (
+              <View style={[styles.eachPickerWhole, Click && selectedDaily == picker.id && { height: hp(23), marginTop: hp(1), backgroundColor: '#444447', borderRadius: hp(2)}]}>
+                <View key={picker.id} style={[styles.eachPickerUp, Click && selectedDaily == picker.id && { marginLeft: wp(3) }]}>
+                  <View style={styles.leftPart}>
+
+                    <TouchableOpacity
+                      style={styles.upButton}
+                      onPress={() => revealHandler(picker.id)}
+                    >
+                      {(Click && selectedDaily == picker.id) ? (<Icons name={'upButton'} />) : (<Icons name={'downButton'} />)}
+                    </TouchableOpacity>
+
+                    <Text style={styles.day}>{picker.weekday}</Text>
+                  </View>
+
+                  <Svgs style={styles.svg} name={picker.weather} width={wp(6)} height={hp(6)} />
+                  <Text style={styles.tempsValue}>{picker.High}°  |   {picker.Low}°</Text>
+                </View>
+
+                {Click && selectedDaily == picker.id && (
+                  <FlatList
+                  data={Hourly}
+                  horizontal={true}
+                  keyExtractor={item => item.id}
+                  renderItem={({ item: card }) => {
+          
+                    let cardStyle = styles.eachCard2;
+                              
+                    return (
+                      <View style={cardStyle}>
+                        <Text style={styles.time2}>{card.time}</Text>
+                        <Svgs name={card.weather} width={wp(5)} height={hp(5)} />
+                        <Text style={styles.temp2}>{card.temp}°C</Text>
+                      </View>
+                    );
+                  }}
+                />
+                )}
+              </View>
+            ))}
+          </View>
+        </LinearGradient>
+      </View>
 
     </ScrollView>
     );
@@ -222,7 +301,7 @@ const styles = StyleSheet.create({
   },
 
   separator: {
-    borderWidth: hp(0.022),
+    borderWidth: hp(0.1),
     borderColor: '#9B9EAD',
   },
 
@@ -268,8 +347,27 @@ const styles = StyleSheet.create({
     backgroundColor: '#32333E',
     justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: wp(3)
-  }, 
+    marginHorizontal: wp(3),
+    borderWidth: hp(0.1),
+  },
+
+  eachCard2: {
+    marginVertical: hp(1),
+    borderRadius: hp(3.5),
+    width: wp(11),
+    height: hp(15),
+    backgroundColor: '#32333E',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: wp(2),
+    borderWidth: hp(0.1),
+  },
+
+  color: {
+    backgroundColor: '#414146',
+    borderColor: '#fff',
+    borderWidth: hp(0.1),
+  },
 
   time: {
     color: '#fff',
@@ -281,6 +379,79 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: hp(2),
     fontFamily: 'FuturaPTMedium'
+  },
+
+  time2: {
+    color: '#fff',
+    fontSize: hp(1.5),
+    fontFamily: 'FuturaPTLight'
+  },
+
+  temp2: {
+    color: '#fff',
+    fontSize: hp(1.5),
+    fontFamily: 'FuturaPTMedium'
+  },
+
+  weeksWeather: {
+    marginHorizontal: wp(3),
+    marginVertical: hp(2),
+    borderRadius: wp(2)
+  },
+
+  highLow: {
+    color: '#fff',
+    fontFamily: 'FuturaPTLight',
+    fontSize: hp(2),
+    alignSelf: 'flex-end',
+    marginRight: wp(5),
+    marginTop: hp(2)
+  },
+
+  wholePicker: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+
+  eachPickerUp: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+  },
+
+  leftPart: {
+    flexDirection: 'row',
+    width: wp(20),
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginRight: wp(20)
+  },
+
+  upButton: {
+    marginLeft: wp(1),
+    marginTop: hp(-0.5)
+  },
+
+  day: {
+    color: '#fff',
+    fontFamily: 'FuturaPTLight',
+    fontSize: hp(2),
+  },
+
+  tempsValue: {
+    marginLeft: wp(22),
+    color: '#fff',
+    fontFamily: 'FuturaPTLight',
+    fontSize: hp(2),
+  },
+
+  svg: {
+    marginTop: hp(1)
+  },
+
+  linearGradient: {
+    borderRadius: hp(2)
   }
 
 });
