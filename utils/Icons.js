@@ -10,6 +10,8 @@ import CloseIcon from 'react-native-vector-icons/Feather';
 import ShareIcon from 'react-native-vector-icons/Entypo';
 import HomeIcon from 'react-native-vector-icons/Entypo';
 import LocationIcon from 'react-native-vector-icons/FontAwesome5';
+import UpIcon from 'react-native-vector-icons/EvilIcons';
+import DownIcon from 'react-native-vector-icons/EvilIcons';
 
 
 const Icons = ({name}) => {
@@ -48,6 +50,14 @@ const Icons = ({name}) => {
 
         case 'menu':
             return <MenuIcon name="menu" size={30}  color="#fff" />
+            break;
+
+        case 'upButton':
+            return <UpIcon name="chevron-up" size={30}  color="#fff" />
+            break;
+
+        case 'downButton':
+            return <DownIcon name="chevron-down" size={30}  color="#fff" />
             break;
 
         default:

@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   locationContainer: {
     flexDirection: 'column',
     paddingHorizontal: wp(5),
-    paddingVertical: hp(2),
+    paddingVertical: hp(2.2),
     justifyContent: 'space-around'
   },
 

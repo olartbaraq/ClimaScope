@@ -19,7 +19,7 @@ const Onboarding = () => {
         const autoRedirect = () => {
             setTimeout(() => {
                 navigation.navigate('Leftdrawer');
-            }, 10000);
+            }, 8000);
         }
         
         autoRedirect()

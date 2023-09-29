@@ -10,30 +10,30 @@ import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-nativ
 
 
 
-const Svgs = ({name, width, height}) => {
+const Svgs = ({name, width, height, style}) => {
     switch (name) {
         case 'cloudy':
-            return <PartlyCloudy width={width} height={height}/>
+            return <PartlyCloudy style={style} width={width} height={height}/>
             break;
 
         case 'sunny':
-            return <Sunny width={width} height={height}/>
+            return <Sunny style={style} width={width} height={height}/>
             break;
 
         case 'humid':
-            return <Humid width={width} height={height}/>
+            return <Humid style={style} width={width} height={height}/>
             break;
 
         case 'sunset':
-            return <Sunset width={width} height={height}/>
+            return <Sunset style={style} width={width} height={height}/>
             break;
 
         case 'rain':
-            return <Rain width={width} height={height}/>
+            return <Rain style={style} width={width} height={height}/>
             break;
 
         case 'clear':
-            return <Clear width={width} height={height}/>
+            return <Clear style={style} width={width} height={height}/>
             break;
 
         default:
