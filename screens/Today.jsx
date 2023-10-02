@@ -5,9 +5,57 @@ import Icons from '../utils/Icons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradientText } from 'react-native-linear-gradient-text';
 import LinearGradient from 'react-native-linear-gradient';
-
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 const Today = () => {
+
+  function getRandomNumber() {
+    // Generate a random number between 0 (inclusive) and 1 (exclusive)
+    const randomNumberBetween0And1 = Math.random();
+    
+    // Scale the random number to be between 0 and 500
+    const randomNumberBetween0And500 = randomNumberBetween0And1 * 500;
+    
+    // Use Math.floor to round down to the nearest integer
+    const randomIntegerBetween0And500 = Math.floor(randomNumberBetween0And500);
+    
+    return randomIntegerBetween0And500;
+  }
+
+  const randomNumber = getRandomNumber()
+
+  const getAirQuality = (randomNumber) => {
+    let category;
+    let description;
+  
+    if (randomNumber >= 0 && randomNumber <= 50) {
+      category = "Good";
+      description = "You have a good air quality, enjoy your outdoor activities";
+    } else if (randomNumber <= 100) {
+      category = "Moderate";
+      description = "Your air quality is moderate, Plan strenuous outdoor activities when air quality is better";
+    } else if (randomNumber <= 150) {
+      category = "Unhealthy for Sensitive Groups";
+      description = "Your air quality is unhealthy for sensitive groups, cut back or reschedule outdoor activities when air quality is better";
+    } else if (randomNumber <= 200) {
+      category = "Unhealthy";
+      description = "Your air quality is unhealthy, avoid strenuous outdoor activities";
+    } else if (randomNumber <= 300) {
+      category = "Very Unhealthy";
+      description = "Your air quality is very unhealthy, avoid physical outdoor activities";
+    } else {
+      category = "Hazardous";
+      description = "Your air quality is hazardous, avoid all outdoor activities";
+    }
+  
+    return { randomNumber, category, description };
+  };
+
+  const airQualityInfo = getAirQuality(304);
+
+  const fillValue = ((airQualityInfo.randomNumber) / 5)
+  
+  
 
   const Hourly = [
     {id: 1, time: '01:00', temp: '29', weather: 'rain'},
@@ -163,15 +211,15 @@ const Today = () => {
         <LinearGradient
           colors={['#232329', '#2F313A']}
           useAngle={true} angle={60} angleCenter={{x:0.5,y:0.5}}
-           style={styles.linearGradient}
+          style={styles.linearGradient}
         >
 
           <Text style={styles.highLow}>High  |  Low</Text>
 
           <View style={styles.wholePicker}>
             {Daily.map((picker) => (
-              <View style={[styles.eachPickerWhole, Click && selectedDaily == picker.id && { height: hp(23), marginTop: hp(1), backgroundColor: '#444447', borderRadius: hp(2)}]}>
-                <View key={picker.id} style={[styles.eachPickerUp, Click && selectedDaily == picker.id && { marginLeft: wp(3) }]}>
+              <View key={picker.id} style={[styles.eachPickerWhole, Click && selectedDaily == picker.id && { height: hp(23), marginTop: hp(1), backgroundColor: '#444447', borderRadius: hp(2)}]}>
+                <View style={[styles.eachPickerUp, Click && selectedDaily == picker.id && { marginLeft: wp(3) }]}>
                   <View style={styles.leftPart}>
 
                     <TouchableOpacity
@@ -211,6 +259,66 @@ const Today = () => {
             ))}
           </View>
         </LinearGradient>
+      </View>
+
+      <View style={styles.separator}></View>
+
+      <View style={styles.airQuality}>
+        <Text style={styles.AQtext}>Air Quality</Text>
+        <View style={styles.AQCircle}>
+          <AnimatedCircularProgress
+            size={120}
+            width={5}
+            fill={fillValue}
+            tintColor="#fff"
+            backgroundColor="#32333E"
+            arcSweepAngle={240}
+            rotation={-120}
+            >
+            {
+              (fill) => (
+                <View style={styles.airText}>
+                  <Text style={styles.airNum}>{ airQualityInfo.randomNumber }</Text>
+                  <Text style={styles.airCat}>{ airQualityInfo.category }</Text>
+                </View>
+              )
+            }
+          </AnimatedCircularProgress>
+
+          <Text style={styles.airDesc}>{airQualityInfo.description}</Text>
+
+          <Text style={styles.zero}>0</Text>
+          <Text style={styles.fiveHundred}>500</Text>
+        </View>
+      </View>
+
+      <View style={styles.separator}></View>
+
+      <View style={styles.sunAndMoon}>
+        <Text style={styles.sunMoonText}>Sun & Moon</Text>
+
+        <View style={styles.sunAnime}>
+          <View style={styles.sunRiseBody}>
+            <Text style={styles.sunRiseText}>05:57 AM</Text>
+            <Text style={styles.sunrise}>Sunrise</Text>
+          </View>
+
+          <AnimatedCircularProgress
+            size={120}
+            width={2}
+            fill={60}
+            tintColor="#fff"
+            backgroundColor="#32333E"
+            arcSweepAngle={180}
+            rotation={-90}
+            renderCap={({center}) => <Svgs name={'sunny'} width={wp(6)} height={hp(6)} />}
+          />
+
+          <View style={styles.sunRiseBody}>
+            <Text style={styles.sunRiseText}>06:12 PM</Text>
+            <Text style={styles.sunrise}>Sunset</Text>
+          </View>
+        </View>
       </View>
 
     </ScrollView>
@@ -452,6 +560,91 @@ const styles = StyleSheet.create({
 
   linearGradient: {
     borderRadius: hp(2)
+  },
+
+  airQuality: {
+    backgroundColor: '#232329',
+    marginHorizontal: wp(2),
+    marginVertical: hp(1),
+    padding: wp(2),
+    borderRadius: hp(3)
+  },
+
+  AQtext: {
+    color: '#fff',
+    fontFamily: 'FuturaPTMedium',
+    fontSize: hp(2),
+    marginLeft: wp(5)
+  },
+
+  AQCircle: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: hp(1)
+  },
+
+  airText: {
+    flexDirection: 'column',
+    width: wp(30),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: hp(-3),
+    paddingHorizontal: wp(5)
+  },
+
+  airDesc: {
+    color: '#9B9EAD',
+    fontSize: hp(2),
+    fontFamily: 'FuturaPTLight',
+    marginRight: wp(6),
+    width: wp(50)
+  },
+
+  airCat: {
+    color: '#fff',
+    fontSize: hp(1.5),
+    fontFamily: 'FuturaPTLight',
+    
+  },
+
+  airNum: {
+    color: '#fff',
+    fontSize: hp(4),
+    fontFamily: 'FuturaPTMedium',
+  },
+
+  zero: {
+    position: 'absolute',
+    left: wp(2),
+    bottom: hp(2),
+    color: '#fff',
+    fontSize: hp(1),
+    fontFamily: 'FuturaPTLight',
+  },
+
+  fiveHundred: {
+    position: 'absolute',
+    left: wp(24),
+    bottom: hp(2),
+    color: '#fff',
+    fontSize: hp(1),
+    fontFamily: 'FuturaPTLight',
+  },
+
+  sunAndMoon: {
+    backgroundColor: '#232329',
+    marginHorizontal: wp(2),
+    marginVertical: hp(1),
+    padding: wp(2),
+    borderRadius: hp(3)
+  },
+
+  sunMoonText: {
+    color: '#fff',
+    fontFamily: 'FuturaPTMedium',
+    fontSize: hp(2),
+    marginLeft: wp(5)
   }
 
 });
