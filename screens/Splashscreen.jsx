@@ -89,19 +89,15 @@ const styles = StyleSheet.create({
     UpperText: {
         fontFamily: 'FuturaPTBold',
         fontSize: hp('5%'),
-        marginBottom: hp('-3%')
+        marginBottom: hp('-3%'),
+        color: '#2C2D35'
     },
     LowerText: {
         fontFamily: 'FuturaPTMedium',
         fontSize: hp('3%'),
-        marginTop: hp('-5%')
+        marginTop: hp('-5%'),
+        color: '#2C2D35'
     },
-
-    // image: {
-    //     width: wp(100),
-    //     height: hp(100),
-    //     resizeMode: 'contain',
-    // },
 
     imageContainer: {
         width: 50, // Adjust as needed
