@@ -1,6 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { StyleSheet, View, Text, Image, Alert } from 'react-native';
-import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, ReduceMotion, withSpring
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, 
+    Easing, ReduceMotion, withSpring, withSequence
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
@@ -25,6 +26,18 @@ const Splashscreen = () => {
     const animatedChanged = useAnimatedStyle(() => ({
         transform: [{ translateX: linear.value + 300}],
     }));
+
+    const animatedStyles = useAnimatedStyle(() => ({
+        transform: [
+            {
+                scale:
+                    withSequence(
+                        withTiming(2.5, { duration: 300 }),
+                        withSpring(1.0)
+                    ),
+            },
+        ],
+    })); 
     
 
     useEffect(() => {
@@ -60,10 +73,12 @@ const Splashscreen = () => {
                         <Text style={styles.UpperText}>ClimaScope</Text>
                     </Animated.View>
 
-                    <Image 
-                    style={styles.image}
-                    source={require('../assets/images/Group.png')}
-                    />
+                    <Animated.View style={[styles.Text, animatedStyles]}>
+                        <Image 
+                        style={styles.image}
+                        source={require('../assets/images/Group.png')}
+                        />
+                    </Animated.View>
                     
                     <Animated.View style={[styles.Text, animatedChanged]}>
                         <Text style={styles.LowerText}>Forecast</Text>

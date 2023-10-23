@@ -5,7 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 
 
 
-const Screenheader = ({navigation}) => {
+const Screenheader = ({navigation,  weatherValue}) => {
   return (
     <View style={styles.header}>
         <TouchableOpacity
@@ -16,7 +16,8 @@ const Screenheader = ({navigation}) => {
         </TouchableOpacity>
 
         <View style={styles.location}>
-            <Text style={styles.locationText}>Ibadan, NG</Text>
+            {!weatherValue ? (<Text style={styles.locationText}></Text>) : (<Text style={styles.locationText}>{weatherValue?.location?.region}/{weatherValue?.location?.timezone_id.split('/')[0]}</Text>)}
+            
         </View>
 
     </View>
@@ -26,16 +27,22 @@ const Screenheader = ({navigation}) => {
 const styles = StyleSheet.create({
     header: {
         height: hp(6),
-        width: wp(60),
+        width: wp(70),
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
     },
 
+    location: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
     locationText : {
         color: '#fff',
         fontFamily: 'FuturaPTMedium',
-        fontSize: hp(2.2)
+        fontSize: hp(2.2),
+        alignItems: 'center',
     },
 
     menuButton : {

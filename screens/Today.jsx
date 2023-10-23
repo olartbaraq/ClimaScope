@@ -1,13 +1,133 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, ScrollView, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, PermissionsAndroid, FlatList, ToastAndroid, Platform, TouchableOpacity } from 'react-native';
 import Svgs from '../assets/svgs';
 import Icons from '../utils/Icons';
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import { LinearGradientText } from 'react-native-linear-gradient-text';
 import LinearGradient from 'react-native-linear-gradient';
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import Geolocation from '@react-native-community/geolocation';
+import { OpenWeather_APIKEY, WeatherStack } from '@env'
+import axios from 'axios';
+import Shimmer from 'react-native-shimmer-kit';
 
-const Today = () => {
+
+
+
+const Today = ({weatherValue, setWeatherValue}) => {
+
+  const [currentLongitude, setCurrentLongitude] = useState('...');
+  const [currentLatitude, setCurrentLatitude] = useState('...');
+  const [locationStatus, setLocationStatus] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [OpenWeatherValue, setOpenWeatherValue] = useState(null);
+
+    
+  const getOneTimeLocation = () => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+
+        setCurrentLongitude(currentLongitude);
+
+        setCurrentLatitude(currentLatitude);
+      },
+      (error) => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 1000
+      },
+    );
+  };
+
+  const subscribeLocation = () => {
+    watchID = Geolocation.watchPosition(
+      (position) => {
+  
+        const currentLongitude = JSON.stringify(position.coords.longitude);
+
+        const currentLatitude = JSON.stringify(position.coords.latitude);
+
+        setCurrentLongitude(currentLongitude);
+
+        setCurrentLatitude(currentLatitude);
+      },
+      (error) => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: 1000
+      },
+    );
+  };
+    
+useEffect(() => {
+  const requestLocationPermission = async () => {
+    if (Platform.OS === 'ios') {
+      getOneTimeLocation();
+      subscribeLocation();
+    } else {
+      try {
+          if (Platform.Version <= 29) {
+              const granted = await PermissionsAndroid.request(
+                  PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                  {
+                  title: 'Location Access Required',
+                  message: 'This App needs to Access your location',
+                  },
+              );
+              if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                  getOneTimeLocation();
+                  subscribeLocation();
+              } else {
+                  setLocationStatus('Permission Denied');
+              }
+          } else {
+                  getOneTimeLocation();
+                  subscribeLocation();
+          } 
+          } catch (err) {
+              ToastAndroid.showWithGravityAndOffset(
+                  `${err}`,
+                  ToastAndroid.LONG,
+                  ToastAndroid.TOP,
+                  25,
+                  100,
+              );
+              }
+          }
+          };
+  requestLocationPermission();
+  return () => {
+    Geolocation.clearWatch(watchID);
+  };
+}, []);
+
+
+useEffect(() => {
+  const getWeatherValue = async () => {
+    try{
+        const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${currentLatitude}&lon=${currentLongitude}&appid=${OpenWeather_APIKEY}&units=metric`
+        const weather_url = `http://api.weatherstack.com/current?access_key=${WeatherStack}&query=${currentLatitude},${currentLongitude}&units=m`
+        const weatherResponse = await axios.get(weather_url);
+        const OpenWeatherResponse = await axios.get(url);
+        setWeatherValue(weatherResponse?.data);
+        setOpenWeatherValue(OpenWeatherResponse?.data);
+        setLoading(false)
+    } catch (error) {
+     
+    }
+  }
+  getWeatherValue()
+}, [currentLatitude, currentLongitude])
+
 
   function getRandomNumber() {
     // Generate a random number between 0 (inclusive) and 1 (exclusive)
@@ -51,11 +171,39 @@ const Today = () => {
     return { randomNumber, category, description };
   };
 
-  const airQualityInfo = getAirQuality(304);
+  const airQualityInfo = getAirQuality(randomNumber);
 
   const fillValue = ((airQualityInfo.randomNumber) / 5)
+
+  const convertToLocalDate = (localtime_epoch) => {
+    // Convert the epoch time to milliseconds
+    const epochMilliseconds = localtime_epoch * 1000;
   
+    // Create a Date object
+    const date = new Date(epochMilliseconds);
   
+    // Define options for formatting the date
+    const options = {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'short',
+    };
+  
+    // Format the date using the options
+    const formattedDate = date.toLocaleDateString('en-US', options);
+  
+    return formattedDate;
+  }
+
+  const convertToLocalTime = (unixDT) => {
+    const date = new Date(unixDT * 1000);
+
+    const hours = date.getUTCHours();
+    const minutes = date.getUTCMinutes();
+
+    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    return formattedTime;
+  }
 
   const Hourly = [
     {id: 1, time: '01:00', temp: '29', weather: 'rain'},
@@ -93,239 +241,270 @@ const Today = () => {
   
   return (
     <ScrollView>
-      <View style={styles.section1}>
-        <View style={styles.dateBackground}>
-          <Text style={styles.todayDate}>Saturday,11 Sept</Text>
-        </View>
-
-        <View style={styles.upperWeatherIcon}>
-          <Svgs name={'cloudy'} width={wp(45)} height={hp(45)} />
-       
-          <View style={styles.valuesAndWeather}>
-            <LinearGradientText
-              colors={['#A5A2B5', '#545760']}
-              text='33°'
-              // {`${weather.Icons}`}
-              start={{ x: 0.1, y: -0.3}} 
-              end={{ x: -0.2, y: 1}}
-              textStyle={styles.weatherValue}
+      {
+        loading ? (
+          <View style={styles.shimmerSection}>
+            <Shimmer
+              width={wp(100)}
+              height={hp(100)}
+              duration={3000}
+              islooped={true}
+              colors={['#2C2D35', '#323339', '#323339','#2C2D35']}
             />
-            {/* <Text style={styles.weatherValue}>33°</Text> */}
-            <Text style={styles.weatherName}>Partly cloudy</Text>
           </View>
-        </View>
-      </View>
+          ) : (
+          <>
+            <View style={styles.section1}>
+              <View style={styles.dateBackground}>
+                <Text style={styles.todayDate}>{convertToLocalDate(weatherValue?.location?.localtime_epoch)}</Text>
+              </View>
 
-      <View style={styles.latAndLong}>
-        <View style={styles.lat}>
-          <Text style={styles.latKey}>Latitude</Text>
-          <Text style={styles.latValue}>3.4227</Text>
-        </View>
-
-        <View style={styles.lat}>
-        <Text style={styles.latKey}>Longitude</Text>
-          <Text style={styles.latValue}>7.4568</Text>
-        </View>
-        
-      </View>
-
-      <View style={styles.separator}></View>
-
-      <View style={styles.overalWeather}>
-
-        <View style={styles.colum1}>
-          <View style={styles.columnRow}>
-            <Svgs name={'cloudy'} width={wp(6)} height={hp(6)} />
-
-            <View style={styles.rowText}>
-              <Text style={styles.precipitation}>Pressure</Text>
-              <Text style={styles.value}>21%</Text>
+              <View style={styles.upperWeatherIcon}>
+               {weatherValue?.current?.weather_descriptions.map((result, index) => (
+                  <View key={index}>
+                    <Svgs name={result} width={wp(30)} height={hp(30)} style={{marginLeft: hp(2)}}/>
+                  </View>
+                ))} 
+                
+                <View style={styles.valuesAndWeather}>
+                  <LinearGradientText
+                    colors={['#A5A2B5', '#545760']}
+                    text={`${weatherValue?.current?.temperature}`}
+                    start={{ x: 0.1, y: -0.3}} 
+                    end={{ x: -0.2, y: 1}}
+                    textStyle={styles.weatherValue}
+                  />
+                  <Text style={styles.weatherName}>{weatherValue?.current?.weather_descriptions}</Text>
+                </View>
+              </View>
             </View>
 
-          </View>
+            <View style={styles.latAndLong}>
+              <View style={styles.lat}>
+                <Text style={styles.latKey}>Latitude</Text>
+                <Text style={styles.latValue}>{(parseFloat(currentLatitude)).toFixed(4)}</Text>
+              </View>
 
-          <View style={styles.columnRow}>
-            <Svgs name={'sunny'} width={wp(6)} height={hp(6)} />
-
-            <View style={styles.rowText}>
-              <Text style={styles.precipitation}>Wind</Text>
-              <Text style={styles.value}>10 km/h</Text>
-            </View>
-            
-          </View>
-
-        </View>
-        
-        <View style={styles.colum1}>
-          <View style={styles.columnRow}>
-            <Svgs name={'humid'} width={wp(6)} height={hp(6)} />
-
-            <View style={styles.rowText}>
-              <Text style={styles.precipitation}>Humidity</Text>
-              <Text style={styles.value}>59%</Text>
+              <View style={styles.lat}>
+              <Text style={styles.latKey}>Longitude</Text>
+                <Text style={styles.latValue}>{(parseFloat(currentLongitude)).toFixed(4)}</Text>
+              </View>
+              
             </View>
 
-          </View>
+            <View style={styles.separator}></View>
 
-          <View style={styles.columnRow}>
-            <Svgs name={'sunset'} width={wp(6)} height={hp(6)} />
-            <View style={styles.rowText}>
-              <Text style={styles.precipitation}>Sunset</Text>
-              <Text style={styles.value}>29%</Text>
-            </View>
-            
-          </View>
-          
-        </View>
+            <View style={styles.overalWeather}>
 
-      </View>
+              <View style={styles.colum1}>
+                <View style={styles.columnRow}>
+                  <Svgs name={'cloudy'} width={wp(6)} height={hp(6)} />
 
-      <View style={styles.separator}></View>
-
-      <FlatList
-        data={Hourly}
-        horizontal={true}
-        keyExtractor={item => item.id}
-        renderItem={({ item: card }) => {
-
-          let cardStyle = styles.eachCard;
-          if (card.time === '04:00') {
-            cardStyle = { ...styles.eachCard, ...styles.color };
-          }
-
-          return (
-            <View style={cardStyle}>
-              <Text style={styles.time}>{card.time}</Text>
-              <Svgs name={card.weather} width={wp(10)} height={hp(10)} />
-              <Text style={styles.time}>{card.weather}</Text>
-              <Text style={styles.temp}>{card.temp}°C</Text>
-            </View>
-          );
-        }}
-      />
-
-      <View style={styles.separator}></View>
-
-
-      <View style={styles.weeksWeather}>
-        <LinearGradient
-          colors={['#232329', '#2F313A']}
-          useAngle={true} angle={60} angleCenter={{x:0.5,y:0.5}}
-          style={styles.linearGradient}
-        >
-
-          <Text style={styles.highLow}>High  |  Low</Text>
-
-          <View style={styles.wholePicker}>
-            {Daily.map((picker) => (
-              <View key={picker.id} style={[styles.eachPickerWhole, Click && selectedDaily == picker.id && { height: hp(23), marginTop: hp(1), backgroundColor: '#444447', borderRadius: hp(2)}]}>
-                <View style={[styles.eachPickerUp, Click && selectedDaily == picker.id && { marginLeft: wp(3) }]}>
-                  <View style={styles.leftPart}>
-
-                    <TouchableOpacity
-                      style={styles.upButton}
-                      onPress={() => revealHandler(picker.id)}
-                    >
-                      {(Click && selectedDaily == picker.id) ? (<Icons name={'upButton'} />) : (<Icons name={'downButton'} />)}
-                    </TouchableOpacity>
-
-                    <Text style={styles.day}>{picker.weekday}</Text>
+                  <View style={styles.rowText}>
+                    <Text style={styles.precipitation}>Pressure</Text>
+                    <Text style={styles.value}>{weatherValue?.current?.pressure} Pa</Text>
                   </View>
 
-                  <Svgs style={styles.svg} name={picker.weather} width={wp(6)} height={hp(6)} />
-                  <Text style={styles.tempsValue}>{picker.High}°  |   {picker.Low}°</Text>
                 </View>
 
-                {Click && selectedDaily == picker.id && (
-                  <FlatList
-                  data={Hourly}
-                  horizontal={true}
-                  keyExtractor={item => item.id}
-                  renderItem={({ item: card }) => {
-          
-                    let cardStyle = styles.eachCard2;
-                              
-                    return (
-                      <View style={cardStyle}>
-                        <Text style={styles.time2}>{card.time}</Text>
-                        <Svgs name={card.weather} width={wp(5)} height={hp(5)} />
-                        <Text style={styles.temp2}>{card.temp}°C</Text>
-                      </View>
-                    );
-                  }}
-                />
-                )}
+                <View style={styles.columnRow}>
+                  <Svgs name={'sunny'} width={wp(6)} height={hp(6)} />
+
+                  <View style={styles.rowText}>
+                    <Text style={styles.precipitation}>Wind</Text>
+                    <Text style={styles.value}>{weatherValue?.current?.wind_speed} km/h</Text>
+                  </View>
+                  
+                </View>
+
               </View>
-            ))}
-          </View>
-        </LinearGradient>
-      </View>
+              
+              <View style={styles.colum1}>
+                <View style={styles.columnRow}>
+                  <Svgs name={'humid'} width={wp(6)} height={hp(6)} />
 
-      <View style={styles.separator}></View>
+                  <View style={styles.rowText}>
+                    <Text style={styles.precipitation}>Humidity</Text>
+                    <Text style={styles.value}>{weatherValue?.current?.humidity} %</Text>
+                  </View>
 
-      <View style={styles.airQuality}>
-        <Text style={styles.AQtext}>Air Quality</Text>
-        <View style={styles.AQCircle}>
-          <AnimatedCircularProgress
-            size={120}
-            width={5}
-            fill={fillValue}
-            tintColor="#fff"
-            backgroundColor="#32333E"
-            arcSweepAngle={240}
-            rotation={-120}
-            >
-            {
-              (fill) => (
-                <View style={styles.airText}>
-                  <Text style={styles.airNum}>{ airQualityInfo.randomNumber }</Text>
-                  <Text style={styles.airCat}>{ airQualityInfo.category }</Text>
                 </View>
-              )
-            }
-          </AnimatedCircularProgress>
 
-          <Text style={styles.airDesc}>{airQualityInfo.description}</Text>
+                <View style={styles.columnRow}>
+                  <Svgs name={'sunny'} width={wp(6)} height={hp(6)} />
+                  <View style={styles.rowText}>
+                    <Text style={styles.precipitation}>UV Index</Text>
+                    <Text style={styles.value}>{weatherValue?.current?.uv_index}</Text>
+                  </View>
+                  
+                </View>
+                
+              </View>
 
-          <Text style={styles.zero}>0</Text>
-          <Text style={styles.fiveHundred}>500</Text>
-        </View>
-      </View>
+            </View>
 
-      <View style={styles.separator}></View>
+            <View style={styles.separator}></View>
 
-      <View style={styles.sunAndMoon}>
-        <Text style={styles.sunMoonText}>Sun & Moon</Text>
+            <FlatList
+              data={OpenWeatherValue?.hourly?.slice(0, 13)}
+              horizontal={true}
+              keyExtractor={item => item.dt.toString()}
+              renderItem={({ item: card }) => {
 
-        <View style={styles.sunAnime}>
-          <View style={styles.sunRiseBody}>
-            <Text style={styles.sunRiseText}>05:57 AM</Text>
-            <Text style={styles.sunrise}>Sunrise</Text>
-          </View>
+                let cardStyle = styles.eachCard;
+                if (convertToLocalTime(OpenWeatherValue?.current?.dt) == convertToLocalTime(card.dt)) {
+                  cardStyle = { ...styles.eachCard, ...styles.color };
+                }
 
-          <AnimatedCircularProgress
-            size={120}
-            width={2}
-            fill={60}
-            tintColor="#fff"
-            backgroundColor="#32333E"
-            arcSweepAngle={180}
-            rotation={-90}
-            renderCap={({center}) => <Svgs name={'sunny'} width={wp(6)} height={hp(6)} />}
-          />
+                return (
+                  <View style={cardStyle}>
+                    <Text style={styles.time}>{convertToLocalTime(card.dt)}</Text>
+                    {card?.weather.map((result, index) => (
+                      <View key={index}>
+                        <Svgs name={result.main} width={wp(9)} height={hp(9)} />
+                        <Text style={styles.time}>{result.main}</Text>
+                      </View>
+                    ))} 
+                    <Text style={styles.temp}>{parseInt(card.temp)}°C</Text>
+                  </View>
+                );
+              }}
+            />
 
-          <View style={styles.sunRiseBody}>
-            <Text style={styles.sunRiseText}>06:12 PM</Text>
-            <Text style={styles.sunrise}>Sunset</Text>
-          </View>
-        </View>
-      </View>
+            <View style={styles.separator}></View>
 
+
+            <View style={styles.weeksWeather}>
+              <LinearGradient
+                colors={['#232329', '#2F313A']}
+                useAngle={true} angle={60} angleCenter={{x:0.5,y:0.5}}
+                style={styles.linearGradient}
+              >
+
+                <Text style={styles.highLow}>High  |  Low</Text>
+
+                <View style={styles.wholePicker}>
+                  {Daily.map((picker) => (
+                    <View key={picker.id} style={[styles.eachPickerWhole, Click && selectedDaily == picker.id && { height: hp(23), marginTop: hp(1), backgroundColor: '#444447', borderRadius: hp(2)}]}>
+                      <View style={[styles.eachPickerUp, Click && selectedDaily == picker.id && { marginLeft: wp(3) }]}>
+                        <View style={styles.leftPart}>
+
+                          <TouchableOpacity
+                            style={styles.upButton}
+                            onPress={() => revealHandler(picker.id)}
+                          >
+                            {(Click && selectedDaily == picker.id) ? (<Icons name={'upButton'} />) : (<Icons name={'downButton'} />)}
+                          </TouchableOpacity>
+
+                          <Text style={styles.day}>{picker.weekday}</Text>
+                        </View>
+
+                        <Svgs style={styles.svg} name={picker.weather} width={wp(6)} height={hp(6)} />
+                        <Text style={styles.tempsValue}>{picker.High}°  |   {picker.Low}°</Text>
+                      </View>
+
+                      {Click && selectedDaily == picker.id && (
+                        <FlatList
+                        data={Hourly}
+                        horizontal={true}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item: card }) => {
+                
+                          let cardStyle = styles.eachCard2;
+                                    
+                          return (
+                            <View style={cardStyle}>
+                              <Text style={styles.time2}>{card.time}</Text>
+                              <Svgs name={card.weather} width={wp(5)} height={hp(5)} />
+                              <Text style={styles.temp2}>{card.temp}°C</Text>
+                            </View>
+                          );
+                        }}
+                      />
+                      )}
+                    </View>
+                  ))}
+                </View>
+              </LinearGradient>
+            </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={styles.airQuality}>
+              <Text style={styles.AQtext}>Air Quality</Text>
+              <View style={styles.AQCircle}>
+                <AnimatedCircularProgress
+                  size={120}
+                  width={5}
+                  fill={fillValue}
+                  tintColor="#fff"
+                  backgroundColor="#32333E"
+                  arcSweepAngle={240}
+                  rotation={-120}
+                  >
+                  {
+                    (fill) => (
+                      <View style={styles.airText}>
+                        <Text style={styles.airNum}>{ airQualityInfo.randomNumber }</Text>
+                        <Text style={styles.airCat}>{ airQualityInfo.category }</Text>
+                      </View>
+                    )
+                  }
+                </AnimatedCircularProgress>
+
+                <Text style={styles.airDesc}>{airQualityInfo.description}</Text>
+
+                <Text style={styles.zero}>0</Text>
+                <Text style={styles.fiveHundred}>500</Text>
+              </View>
+            </View>
+
+            <View style={styles.separator}></View>
+
+            <View style={styles.sunAndMoon}>
+              <Text style={styles.sunMoonText}>Sun & Moon</Text>
+
+              <View style={styles.sunAnime}>
+                <View style={styles.sunRiseBody}>
+                  <Text style={styles.sunRiseText}>05:57 AM</Text>
+                  <Text style={styles.sunrise}>Sunrise</Text>
+                </View>
+
+                <AnimatedCircularProgress
+                  size={120}
+                  width={2}
+                  fill={100}
+                  tintColor="#fff"
+                  backgroundColor="#32333E"
+                  arcSweepAngle={180}
+                  rotation={-90}
+                  renderCap={({center}) => <Svgs name={'sunny'} width={wp(6)} height={hp(6)} />}
+                />
+
+                <View style={styles.sunRiseBody}>
+                  <Text style={styles.sunRiseText}>06:12 PM</Text>
+                  <Text style={styles.sunrise}>Sunset</Text>
+                </View>
+              </View>
+            </View>
+          </> 
+        )
+      }
     </ScrollView>
     );
 };
 
 const styles = StyleSheet.create({
+
+  shimmerSection : {
+    height: hp(100),
+    width: wp(100),
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: hp(1),
+    paddingHorizontal: wp(5),
+  },
+
   section1: {
     flexDirection: 'column',
     height: hp(22),
@@ -354,7 +533,7 @@ const styles = StyleSheet.create({
   upperWeatherIcon: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     height: hp(15),
     width: wp(100)
   },
@@ -362,16 +541,17 @@ const styles = StyleSheet.create({
   valuesAndWeather: {
     flexDirection: 'column',
     height: hp(14),
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     marginTop: hp(-6),
-    marginRight: wp(5)
+    marginHorizontal: wp(20)
   },
 
   weatherValue: {
     fontSize: hp(12),
     color: '#979797',
     fontWeight: 'bold',
+    marginRight: hp(5)
   },
 
   weatherName: {
@@ -450,7 +630,7 @@ const styles = StyleSheet.create({
   eachCard: {
     marginVertical: hp(2),
     borderRadius: hp(3.5),
-    width: wp(17),
+    width: wp(20),
     height: hp(20),
     backgroundColor: '#32333E',
     justifyContent: 'center',
@@ -480,7 +660,8 @@ const styles = StyleSheet.create({
   time: {
     color: '#fff',
     fontSize: hp(2),
-    fontFamily: 'FuturaPTLight'
+    fontFamily: 'FuturaPTLight',
+    alignSelf: 'center',
   },
 
   temp: {
