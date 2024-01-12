@@ -10,7 +10,7 @@ import Geolocation from '@react-native-community/geolocation';
 import { OpenWeather_APIKEY, WeatherStack } from '@env'
 import axios from 'axios';
 import Shimmer from 'react-native-shimmer-kit';
-
+import RenderC from '../components/RenderC';
 
 
 
@@ -205,6 +205,8 @@ useEffect(() => {
     return formattedTime;
   }
 
+  const renderC = 'C'
+
   const Hourly = [
     {id: 1, time: '01:00', temp: '29', weather: 'rain'},
     {id: 2, time: '02:00', temp: '21', weather: 'cloudy'},
@@ -269,7 +271,7 @@ useEffect(() => {
                 <View style={styles.valuesAndWeather}>
                   <LinearGradientText
                     colors={['#A5A2B5', '#545760']}
-                    text={`${weatherValue?.current?.temperature}`}
+                    text={`${weatherValue?.current?.temperature}°`}
                     start={{ x: 0.1, y: -0.3}} 
                     end={{ x: -0.2, y: 1}}
                     textStyle={styles.weatherValue}
