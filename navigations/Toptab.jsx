@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native';
 import { Screenheader } from '../components';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -11,9 +11,11 @@ const Tab = createMaterialTopTabNavigator();
 
 const Toptab = ({navigation}) => {
 
+  const [weatherValue, setWeatherValue] = useState(null);
+
   return (
     <View style={styles.body}>
-      <Screenheader navigation={navigation}/>
+      <Screenheader navigation={navigation}  weatherValue={weatherValue}/>
 
       <Tab.Navigator
         initialRouteName="Today"
@@ -31,7 +33,10 @@ const Toptab = ({navigation}) => {
         },
         }}
       >
-        <Tab.Screen name="Today" component={Today} />
+        {/* <Tab.Screen name="Today" component={Today} /> */}
+        <Tab.Screen name="Today">
+          {() => <Today weatherValue={weatherValue} setWeatherValue={setWeatherValue} />}
+        </Tab.Screen>
         <Tab.Screen name="Forecast" component={Forecast} />
         <Tab.Screen name="Precipitation" component={Precipitation} />
         <Tab.Screen name="Radar Sun & Moon" component={Radarsun} />
